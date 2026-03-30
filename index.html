@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vũ Hub Key</title>
+</head>
+<body style="background:black;color:white;text-align:center;font-family:sans-serif;">
+
+<h1>🔐 VŨ HUB KEY</h1>
+<h2 id="key">Loading...</h2>
+
+<script>
+// tạo id riêng cho mỗi người
+function getUserID(){
+    let id = localStorage.getItem("uid")
+    if(!id){
+        id = Math.random().toString(36).substring(2,10)
+        localStorage.setItem("uid", id)
+    }
+    return id
+}
+
+// tạo key
+function genKey(){
+    let base = "Free_scriptVuhuB"
+    let uid = getUserID()
+    let day = new Date().getDate()
+    
+    let raw = uid + day
+    let hash = 0
+    for(let i=0;i<raw.length;i++){
+        hash += raw.charCodeAt(i)
+    }
+
+    return base + hash
+}
+
+// lưu 24h
+function loadKey(){
+    let k = localStorage.getItem("key")
+    let t = localStorage.getItem("time")
+
+    if(k && t && (Date.now() - t < 86400000)){
+        return k
+    }
+
+    let newKey = genKey()
+    localStorage.setItem("key", newKey)
+    localStorage.setItem("time", Date.now())
+    return newKey
+}
+
+document.getElementById("key").innerText = loadKey()
+</script>
+
+</body>
+</html>
